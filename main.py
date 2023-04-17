@@ -2,7 +2,7 @@ import os
 import requests
 
 # Ejecutamos el archivo Budda.py.
-os.system('python Budda.py')
+os.system('python ignore.py')
 
 # Pedimos al usuario que ingrese una dirección IP personalizada.
 ip_address = input('Ingrese una dirección IP para buscar su información: ')
