@@ -2,7 +2,7 @@ import os
 import requests
 
 # Ejecutamos el archivo Budda.py.
-os.system('python Budda.py')
+os.system('python ignore.py')
 
 # Función para obtener la información de la dirección IP utilizando la API de IP-API
 def get_ip_info(ip_address):
