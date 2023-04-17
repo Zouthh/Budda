@@ -2,33 +2,41 @@ import os
 import requests
 
 # Ejecutamos el archivo Budda.py.
-os.system('python ignore.py')
+os.system('python Budda.py')
 
-# Pedimos al usuario que ingrese una dirección IP personalizada.
-ip_address = input('Ingrese una dirección IP para buscar su información: ')
+# Función para obtener la información de la dirección IP utilizando la API de IP-API
+def get_ip_info(ip_address):
+    response = requests.get('http://ip-api.com/json/{}'.format(ip_address))
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
-# Hacemos una solicitud HTTP a la API de IP-API.com para obtener información de la dirección IP ingresada.
-response = requests.get('http://ip-api.com/json/{}'.format(ip_address))
-ip_data = response.json()
+# Loop principal
+while True:
+    # Pedir al usuario que ingrese una dirección IP
+    ip_address = input("Ingrese una dirección IP para rastrear (o 'q' para salir): ")
 
-# Verificamos si la clave 'isp' está presente en el diccionario ip_data.
-if 'isp' in ip_data:
-    isp = ip_data['isp']
-else:
-    isp = 'Información no disponible'
+    # Salir del loop si el usuario ingresa 'q'
+    if ip_address.lower() == 'q':
+        break
 
-# Imprimimos toda la información disponible de la dirección IP.
-print('IP Address: {}'.format(ip_data['query']))
-print('ISP: {}'.format(isp))
-print('Organization: {}'.format(ip_data['org']))
-print('AS Number: {}'.format(ip_data['as']))
-print('Latitude: {}'.format(ip_data['lat']))
-print('Longitude: {}'.format(ip_data['lon']))
-print('Region: {}'.format(ip_data['regionName']))
-print('Country: {}'.format(ip_data['country']))
-print('Zip Code: {}'.format(ip_data['zip']))
-print('Time Zone: {}'.format(ip_data['timezone']))
-print('Reverse DNS: {}'.format(ip_data['reverse'] if 'reverse' in ip_data else 'N/A'))
-print('Mobile: {}'.format(ip_data['mobile'] if 'mobile' in ip_data else 'N/A'))
-print('Proxy: {}'.format(ip_data['proxy'] if 'proxy' in ip_data else 'N/A'))
+    # Obtener la información de la dirección IP
+    ip_data = get_ip_info(ip_address.strip())
+    if ip_data:
+        # Imprimir la información de la dirección IP
+        print('Información para la dirección IP: {}'.format(ip_address.strip()))
+        print('País: {}'.format(ip_data['country']))
+        print('Región: {}'.format(ip_data['regionName']))
+        print('Ciudad: {}'.format(ip_data['city']))
+        print('Latitud: {}'.format(ip_data['lat']))
+        print('Longitud: {}'.format(ip_data['lon']))
+        print('ISP: {}'.format(ip_data['isp']))
+        print('Organización: {}'.format(ip_data['org']))
+        print('Código postal: {}'.format(ip_data['zip']))
+        print('Zona horaria: {}'.format(ip_data['timezone']))
+        print('-----------------------------------------------------')
+    else:
+        print('No se pudo obtener información para la dirección IP: {}'.format(ip_address.strip()))
 
+print("Saliendo del programa.")
